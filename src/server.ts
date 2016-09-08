@@ -3,19 +3,21 @@ import * as log from './log';
 import * as Koa from 'koa';
 import * as Router from 'koa-router';
 import * as serve from 'koa-static';
-import * as bodyParser from 'koa-bodyparser';
 import { handleHealthGet, handleHealthPost } from './server/health';
 
 const app = new Koa();
 const router = new Router();
+const bodyParser = require('koa-bodyparser');
 
 app.proxy = true;
 
 // declare body on the koa's Request because we're using koa-bodyparser
 declare module 'koa' { interface Request { body: any; } }
 app.use(bodyParser({
+  enableTypes: ['json', 'form', 'text'],
   formLimit: config.get('server.requestLimit') as string,
-  jsonLimit: config.get('server.requestLimit') as string
+  jsonLimit: config.get('server.requestLimit') as string,
+  textLimit: config.get('server.requestLimit') as string
 }));
 
 router.get('/api/health', handleHealthGet);
