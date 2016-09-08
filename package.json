@@ -1,6 +1,10 @@
 {
   "name": "brackets-electron-data",
   "version": "1.0.0",
+  "engines": {
+    "node": "6.5.0",
+    "npm": "3.10.6"
+  },
   "description": "http server for collecting brackets-electron data",
   "main": "./dist/server.js",
   "scripts": {
