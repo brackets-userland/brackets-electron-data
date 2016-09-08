@@ -1,0 +1,37 @@
+{
+  "name": "brackets-electron-data",
+  "version": "1.0.0",
+  "description": "http server for collecting brackets-electron data",
+  "main": "./dist/server.js",
+  "scripts": {
+    "dev": "concurrently --kill-others \"gulp watch\" \"tsc --watch\" \"nodemon ./dist/server.js\"",
+    "test": "gulp build && webpack && tsc && tslint -c tslint.json --project tsconfig.json",
+    "prepublish": "rimraf ./dist && gulp build && webpack && tsc",
+    "start": "rimraf ./dist && gulp build && webpack && tsc && node ./dist/server.js"
+  },
+  "author": "Martin Zagora <zaggino@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@types/config": "^0.0.29",
+    "@types/koa": "^2.0.30",
+    "@types/koa-static": "^2.0.19",
+    "@types/react": "^0.14.30",
+    "@types/react-dom": "^0.14.14",
+    "config": "^1.21.0",
+    "gulp": "^3.9.1",
+    "gulp-watch": "^4.3.9",
+    "koa": "^2.0.0",
+    "koa-static": "^3.0.0",
+    "react": "^15.3.0",
+    "react-dom": "^15.3.0",
+    "rimraf": "^2.5.4",
+    "ts-loader": "^0.8.2",
+    "typescript": "^2.0.2",
+    "webpack": "^1.13.1"
+  },
+  "devDependencies": {
+    "concurrently": "^2.2.0",
+    "nodemon": "^1.10.0",
+    "tslint": "^3.14.0"
+  }
+}
