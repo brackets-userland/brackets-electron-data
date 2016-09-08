@@ -1,5 +1,6 @@
-import * as Koa from 'koa';
+import * as _ from 'lodash';
 import * as db from './db';
+import * as Koa from 'koa';
 
 export async function handleHealthGet(ctx: Koa.Context, next: () => Promise<any>) {
   const healthLogs = await db.HealthLogs.findAll();
@@ -16,6 +17,10 @@ export async function handleHealthPost(ctx: Koa.Context, next: () => Promise<any
     } catch (err) {
       /* ignore */
     }
+  }
+  if (_.isEmpty(data)) {
+    ctx.response.status = 400;
+    return;
   }
   const healthLog = await db.HealthLogs.create({ ip, userAgent, data });
   ctx.response.body = JSON.stringify(healthLog, null, 4);
