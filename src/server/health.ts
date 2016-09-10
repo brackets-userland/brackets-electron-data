@@ -34,7 +34,7 @@ export async function handleHealthDaily(ctx: Koa.Context, next: () => Promise<an
 
   const results: { [day: string]: any } = {};
 
-  await Promise.all(days.map(async (day: string) => {
+  for (let day of days) {
     const entries = await db.sequelize.query(`
       SELECT *
       FROM public.health_logs h1
@@ -47,7 +47,7 @@ export async function handleHealthDaily(ctx: Koa.Context, next: () => Promise<an
     results[day] = {
       count: entries.length
     };
-  }));
+  }
 
   ctx.response.body = JSON.stringify(results, null, 4);
 }
