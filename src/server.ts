@@ -3,7 +3,7 @@ import * as log from './log';
 import * as Koa from 'koa';
 import * as Router from 'koa-router';
 import * as serve from 'koa-static';
-import { handleHealthGet, handleHealthPost } from './server/health';
+import { handleHealthGet, handleHealthPost, handleHealthDaily } from './server/health';
 
 const app = new Koa();
 const router = new Router();
@@ -22,6 +22,7 @@ app.use(bodyParser({
 
 router.get('/api/health', handleHealthGet);
 router.post('/api/health', handleHealthPost);
+router.get('/api/health/daily', handleHealthDaily);
 
 app.use(async (ctx, next) => {
   try {

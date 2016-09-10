@@ -25,3 +25,29 @@ export async function handleHealthPost(ctx: Koa.Context, next: () => Promise<any
   const healthLog = await db.HealthLogs.create({ ip, userAgent, data });
   ctx.response.body = JSON.stringify(healthLog, null, 4);
 }
+
+export async function handleHealthDaily(ctx: Koa.Context, next: () => Promise<any>) {
+  const rows = await db.sequelize.query(`
+    SELECT DISTINCT(date_trunc('day', hl."createdAt")) as day FROM public.health_logs hl ORDER BY day DESC
+  `, { type: db.sequelize.QueryTypes.SELECT });
+  const days = rows.map((r: { day: string }) => r.day);
+
+  const results: { [day: string]: any } = {};
+
+  await Promise.all(days.map(async (day: string) => {
+    const entries = await db.sequelize.query(`
+      SELECT *
+      FROM public.health_logs h1
+      WHERE date_trunc('day', "createdAt") = :day
+      ORDER BY "createdAt" DESC
+    `, {
+      type: db.sequelize.QueryTypes.SELECT,
+      replacements: { day }
+    });
+    results[day] = {
+      count: entries.length
+    };
+  }));
+
+  ctx.response.body = JSON.stringify(results, null, 4);
+}
