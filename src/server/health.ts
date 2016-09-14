@@ -3,7 +3,11 @@ import * as db from './db';
 import * as Koa from 'koa';
 
 export async function handleHealthGet(ctx: Koa.Context, next: () => Promise<any>) {
-  const healthLogs = await db.HealthLogs.findAll();
+  const healthLogs = await db.HealthLogs.findAll({
+    order: [
+      ['id', 'DESC']
+    ]
+  });
   ctx.response.body = JSON.stringify(healthLogs, null, 4);
 }
 
